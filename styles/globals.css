@@ -17,13 +17,23 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(0, 0, 0);
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    ),
+    url("https://upload.wikimedia.org/wikipedia/commons/3/3b/Books.by.women.photographers.jpeg")
+      no-repeat center center fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-size: 1.1rem;
+}
+
+body {
+  background-color: rgb(110, 112, 110);
+  font-family: "Times New Roman", Times, serif;
 }
 
 @layer utilities {
