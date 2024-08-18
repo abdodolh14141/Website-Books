@@ -1,0 +1,23 @@
+.middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin: 5px;
+}
+
+.middle p {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 8px;
+}
+
+.img_web {
+  width: 40%;
+  text-align: center;
+}
