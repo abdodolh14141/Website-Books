@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -50,7 +50,8 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-10 opacity-75">
+    <div className="min-h-screen flex items-center justify-center bg-gray-10 opacity-90">
+      <Toaster />
       <div className="bg-white p-7 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Sign In

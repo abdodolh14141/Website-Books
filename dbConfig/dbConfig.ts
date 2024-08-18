@@ -20,7 +20,6 @@ export async function connect() {
 
     connectionDb.on("error", (err) => {
       console.log("SomeTing Wrong Please Try Agian Error: " + err);
-      process.exit(1);
     });
   } catch (error) {
     console.log("Error Server : " + error);

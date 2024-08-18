@@ -1,17 +1,26 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { FaRegUser } from "react-icons/fa";
 
-const Nav = () => {
+export default function Nav() {
+  const { data: session } = useSession();
   const router = useRouter();
+  const [isLogin, setIsLogin] = useState(false);
+  const [name, setName] = useState("");
 
-  const { data: session, status } = useSession();
-  const isLogin = status === "authenticated";
-  const UserName = session?.user?.name;
+  useEffect(() => {
+    if (session?.user) {
+      setIsLogin(true);
+      setName(session.user?.name);
+    } else {
+      setIsLogin(false);
+    }
+  }, [session]);
 
   const handleLogout = async () => {
     await signOut();
@@ -30,28 +39,32 @@ const Nav = () => {
             className="object-contain"
           />
         </Link>
-        <Link href="/books" className="hover:text-gray-400 transition">
+        <Link
+          href="/books"
+          className="hover:bg-slate-950 py-1 px-4 rounded transition"
+        >
           Books
         </Link>
       </div>
       <div className="flex items-center space-x-4">
         {isLogin ? (
           <>
-            <h1 className="text-center m-2 p-1">
-              Welcome {UserName.split(" ")[0]}
-            </h1>
+            <div className="flex items-center space-x-2">
+              <FaRegUser className="text-2xl" />
+              <p className="text-lg">Welcome {name.split(" ")[0]}</p>
+            </div>
             <Link
               href="/about"
-              className="hover:text-gray-400 transition bg-red-950 hover:bg-emerald-600 py-2 px-4 rounded transition"
+              className="hover:text-gray-400 transition bg-red-950 hover:bg-emerald-600 py-2 px-4 rounded"
             >
               About
             </Link>
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded transition"
+            <Link
+              href="/dashboard"
+              className="hover:text-gray-400 transition bg-red-950 hover:bg-emerald-600 py-2 px-4 rounded"
             >
-              Logout
-            </button>
+              Dashboard
+            </Link>
           </>
         ) : (
           <>
@@ -63,7 +76,7 @@ const Nav = () => {
             </Link>
             <Link
               href="/login"
-              className="hover:bg-slate-950 py-1 px-4 rounded  transition"
+              className="hover:bg-slate-950 py-1 px-4 rounded transition"
             >
               Login
             </Link>
@@ -78,6 +91,4 @@ const Nav = () => {
       </div>
     </nav>
   );
-};
-
-export default Nav;
+}

@@ -5,10 +5,12 @@ import React, { useEffect, useState } from "react";
 export default function GetBook({ params }) {
   const [books, setBooks] = useState([]);
   const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
+        setLoading(true);
         const resBook = await fetch("https://gutendex.com/books");
         if (!resBook.ok) {
           throw new Error("Failed to fetch books");
@@ -17,6 +19,8 @@ export default function GetBook({ params }) {
         setBooks(jsonBooks.results);
       } catch (error) {
         console.error("Failed to fetch books:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -29,6 +33,17 @@ export default function GetBook({ params }) {
       setBook(foundBook);
     }
   }, [books, params.id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="flex flex-col items-center">
+          <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+          <div className="text-3xl font-semibold text-gray-700">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-5">

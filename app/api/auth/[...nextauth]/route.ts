@@ -1,11 +1,8 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connect } from "@./dbConfig/dbConfig";
-import User from "@models/userModel";
+import { connect } from "@/dbConfig/dbConfig";
+import User from "@/models/userModel";
 import bcrypt from "bcrypt";
-
-connect();
 
 interface Credentials {
   email: string;
@@ -15,19 +12,19 @@ interface Credentials {
 const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60, // Session duration: 1 hour
   },
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
-    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: Credentials | undefined) {
+        // Ensure the database is connected within the authorize function
+        await connect();
+
         if (!credentials) {
           throw new Error("No credentials provided");
         }
@@ -48,27 +45,29 @@ const authOptions: NextAuthOptions = {
         return {
           id: user._id.toString(),
           email: user.Email,
-          name: user.UserName, // Correctly accessing the UserName property
+          name: user.UserName,
         };
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/", // Custom sign-in page
+    signIn: "/login", // Custom sign-in page
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.name = user.name; // Including UserName in the token
+        token.name = user.name;
+        token.email = user.email;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
-        session.user.name = token.name; // Including UserName in the session
+        session.user.name = token.name;
+        session.user.email = token.email;
       }
       return session;
     },

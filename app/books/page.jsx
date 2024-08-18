@@ -5,7 +5,6 @@ import Link from "next/link";
 
 export default function Post() {
   const [data, setData] = useState([]);
-  const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -27,14 +26,6 @@ export default function Post() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTime(new Date().toLocaleTimeString());
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -52,14 +43,7 @@ export default function Post() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-5  text-center">Books</h1>
-      {/* <img
-        src="https://images.theconversation.com/files/45159/original/rptgtpxd-1396254731.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=1356&h=668&fit=crop"
-        alt="image books"
-        width={1000}
-        className="mx-auto mb-6"
-      /> */}
-      <h2 className="text-xl mb-6 text-center">{time}</h2>
+      <h1 className="text-4xl font-bold mb-5 text-white text-center">Books</h1>
       <hr className="my-4" />
       <div className="flex flex-wrap -mx-1">
         {data.map((book) => (

@@ -17,8 +17,8 @@ export default function Login() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const res = await getSession();
-        if (res.user) {
+        const session = await getSession();
+        if (session && session.user) {
           router.replace("/books");
         }
       } catch (error) {
@@ -48,6 +48,7 @@ export default function Login() {
 
       if (res.error) {
         toast.error("Invalid credentials. Please try again.");
+        router.refresh();
       } else {
         toast.success("Login successful!");
         router.replace("/books");
@@ -60,9 +61,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-10 opacity-75">
+    <div className="min-h-screen flex items-center justify-center opacity-90">
       <Toaster />
-      <div className="bg-white p-7 rounded-lg shadow-lg w-full max-w-4xl">
+      <div className="bg-white p-7 rounded-lg shadow-lg w-full max-w-3xl">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Login Page
         </h1>
@@ -109,13 +110,8 @@ export default function Login() {
             {loading ? "Loading..." : "Login"}
           </button>
         </form>
-        <div className="flex items-center space-x-4 p-2">
-          <Link
-            className="hover:text-green-700 hover:bg-red-950 rounded-md py-1 px-4 rounded transition"
-            href="/login"
-          >
-            Don't Have Account Click To Signin ?
-          </Link>
+        <div className="flex items-center justify-center mt-4">
+          <Link href="/sign">Don't have an account? Click to register.</Link>
         </div>
       </div>
     </div>
